@@ -2,6 +2,8 @@
 
 A daemon which handles core dumps for Linux applications and submits them as a HTTP PUT request to a server.  You'll need your own HTTP server in place to accept the PUT requests (or you can use https://httpbin.org/put for testing as shown in the commands below).
 
+![Screenshot](http://i.imgur.com/vx9NqRI.png)
+
 ## Build it
 
 You need clang installed to build the code.
