@@ -92,6 +92,8 @@ int run_daemon(int argc, char** argv) {
     
     if (submit_crash_report(url, fd_to_recv) != 0) {
       sd_journal_print(LOG_ERR, "unable to submit crash report");
+    } else {
+      sd_journal_print(LOG_NOTICE, "submitted crash report successfully");
     }
     
     close(fd_to_recv);

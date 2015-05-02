@@ -6,6 +6,15 @@ static size_t read_callback(void* ptr, size_t size, size_t nmemb, void* userdata
   return read(fd, ptr, size * nmemb);
 }
 
+static size_t write_callback(void* ptr, size_t size, size_t nmemb) {
+  char* data = malloc((size * nmemb) + 1);
+  memset(data, 0, (size * nmemb) + 1);
+  memcpy(data, ptr, size * nmemb);
+  sd_journal_print(LOG_NOTICE, "%s", data);
+  free(data);
+  return size * nmemb;
+}
+
 int submit_crash_report(char* url, int fd) {
   CURL* curl;
   int result;
@@ -24,6 +33,7 @@ int submit_crash_report(char* url, int fd) {
   curl_easy_setopt(curl, CURLOPT_PUT, 1L);
   curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
   curl_easy_setopt(curl, CURLOPT_READDATA, fd_store);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
   
   struct curl_slist *chunk = NULL;
   chunk = curl_slist_append(chunk, "Transfer-Encoding: chunked");
